@@ -17,9 +17,9 @@ app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
-db.User.create({ name: "Ernest Hemingway" })
-  .then(dbUser => {
-    console.log(dbUser);
+db.Workout.create({ name: "Ernest Hemingway" })
+  .then(dbWorkout => {
+    console.log(dbWorkout);
   })
   .catch(({ message }) => {
     console.log(message);
@@ -35,10 +35,10 @@ app.get("/notes", (req, res) => {
     });
 });
 
-app.get("/user", (req, res) => {
-  db.User.find({})
-    .then(dbUser => {
-      res.json(dbUser);
+app.get("/Workout", (req, res) => {
+  db.Workout.find({})
+    .then(dbWorkout => {
+      res.json(dbWorkout);
     })
     .catch(err => {
       res.json(err);
@@ -47,20 +47,20 @@ app.get("/user", (req, res) => {
 
 app.post("/submit", ({ body }, res) => {
   db.Note.create(body)
-    .then(({ _id }) => db.User.findOneAndUpdate({}, { $push: { notes: _id } }, { new: true }))
-    .then(dbUser => {
-      res.json(dbUser);
+    .then(({ _id }) => db.Workout.findOneAndUpdate({}, { $push: { notes: _id } }, { new: true }))
+    .then(dbWorkout => {
+      res.json(dbWorkout);
     })
     .catch(err => {
       res.json(err);
     });
 });
 
-app.get("/populateduser", (req, res) => {
-  db.User.find({})
+app.get("/populatedWorkout", (req, res) => {
+  db.Workout.find({})
     .populate("notes")
-    .then(dbUser => {
-      res.json(dbUser);
+    .then(dbWorkout => {
+      res.json(dbWorkout);
     })
     .catch(err => {
       res.json(err);
